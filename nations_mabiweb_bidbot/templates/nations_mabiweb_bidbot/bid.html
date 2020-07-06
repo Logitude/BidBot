@@ -1,0 +1,13 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>{{ match }}</h2>
+    {% if player %}
+        <h2>Bidding as {{ player }}</h2>
+    {% endif %}
+    <form method="post" action="{% url 'nations_mabiweb_bidbot:bid' match.match_id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Review Bid">
+    </form>
+{% endblock %}

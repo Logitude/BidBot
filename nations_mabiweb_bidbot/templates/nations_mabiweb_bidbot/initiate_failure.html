@@ -1,0 +1,6 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>Failure to load MaBiWeb Nations match with ID {{ match_id }}!</h2>
+    <p><a href="{% url 'nations_mabiweb_bidbot:home' %}">Back</a></p>
+{% endblock %}

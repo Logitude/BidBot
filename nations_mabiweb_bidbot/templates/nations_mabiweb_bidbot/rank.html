@@ -1,0 +1,34 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% load nations_mabiweb_bidbot_extras %}
+
+{% block content %}
+    <h2>{{ match }}</h2>
+    <h2>Bidding as {{ player }}</h2>
+    <form method="post" action="{% url 'nations_mabiweb_bidbot:rank' match.match_id %}">
+        {% csrf_token %}
+        {% for nation_set in nation_sets %}
+            <h3>Rank your preference for the following nations:</h3>
+            {% for nation in nation_set %}
+                {% with form|get:nation as form_field %}
+                    {% if form_field.errors %}
+                        <ul>
+                        {% for error in form_field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %} 
+                    <p>{{ form_field.label }}: {{ form_field }}</p>
+                {% endwith %}
+            {% endfor %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+            <ul>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %} 
+        <input type="submit" value="Review Bid">
+    </form>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+    <title>BidBot</title>
+</head>
+<body>
+    <a href="{% url 'home' %}"><h1>BidBot</h1></a>
+    <p>
+        {% if user.is_authenticated %}
+            Welcome, {{ user.username }}!<br>
+            [<a href="{% url 'profile' %}">View your profile</a>] or
+            [<a href="{% url 'logout' %}">Log out</a>]
+        {% else %}
+            [<a href="{% url 'login' %}">Log in</a>] or
+            [<a href="{% url 'signup' %}">Sign up</a>]
+        {% endif %}
+    </p>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

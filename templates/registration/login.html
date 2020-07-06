@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account does not grant you access to that page.</p>
+        {% else %}
+            <p>You need to log in to be able to access that page.</p>
+        {% endif %}
+    {% endif %}
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Log In">
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+{% endblock %}

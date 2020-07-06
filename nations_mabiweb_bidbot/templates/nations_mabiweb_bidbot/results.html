@@ -1,0 +1,38 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>{{ match }}</h2>
+    <h3>Nations:</h3>
+    <ul>
+    {% for nation in match.nation_set.all %}
+        <li>{{ nation.name }}</li>
+    {% endfor %}
+    </ul>
+    <h3>Players:</h3>
+    <ul>
+    {% if player_bids %}
+        {% for player_bid in player_bids %}
+            <li>{{ player_bid }}</li>
+        {% endfor %}
+    {% else %}
+        {% for player in match.player_set.all %}
+            <li>{{ player.name }}
+                {% if player.name in bid_players %}
+                    has placed a bid!
+                {% endif %}
+            </li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+    {% if may_bid %}
+        <a href="{% url 'nations_mabiweb_bidbot:bid' match.match_id %}">Bid</a>
+    {% endif %}
+    {% if nation_assignments %}
+        <h3>Nation assignments:</h3>
+        <ul>
+        {% for nation_assignment in nation_assignments %}
+            <li>{{ nation_assignment }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

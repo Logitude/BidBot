@@ -1,0 +1,6 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>Failure to verify MaBiWeb username {{ username }} with user ID {{ mabiweb_uid }}!</h2>
+    <p><a href="{% url 'nations_mabiweb_bidbot:home' %}">Back</a></p>
+{% endblock %}
