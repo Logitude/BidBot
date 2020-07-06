@@ -2,5 +2,13 @@
 
 {% block content %}
     <h2>BidBot for Nations on MaBiWeb</h2>
-    <a href="{% url 'nations_mabiweb_bidbot:initiate' %}">Initiate bidding for a match</a>
+    <p>
+        <a href="{% url 'nations_mabiweb_bidbot:about' %}">What is this?</a>
+    </p>
+    <p>
+        <a href="{% url 'nations_mabiweb_bidbot:howto' %}">How this works</a>
+    </p>
+    <p>
+        <a href="{% url 'nations_mabiweb_bidbot:initiate' %}">Initiate bidding for a match</a>
+    </p>
 {% endblock %}
