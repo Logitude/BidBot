@@ -7,8 +7,8 @@
     <h2>Bidding as {{ player }}</h2>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:rank' match.match_id %}">
         {% csrf_token %}
-        {% for nation_set in nation_sets %}
-            <h3>Rank your preference for the following nations:</h3>
+        {% for nation_set, bid_value in nation_sets %}
+            <h3>Rank your preference for the following nations, for which you bid {{ bid_value }}:</h3>
             {% for nation in nation_set %}
                 {% with form|get:nation as form_field %}
                     {% if form_field.errors %}

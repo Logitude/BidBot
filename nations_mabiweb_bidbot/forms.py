@@ -23,7 +23,7 @@ class RankForm(forms.Form):
             self.nation_sets.append(nations_with_bid_value)
             ranks = ordinals[1:len(nations_with_bid_value)+1]
             for nation in nations_with_bid_value:
-                self.fields[nation] = forms.ChoiceField(label=f'Rank {nation}', choices=zip(ranks, ranks))
+                self.fields[nation] = forms.ChoiceField(label=nation, choices=zip(ranks, ranks))
 
     def clean(self):
         cleaned_data = super().clean()

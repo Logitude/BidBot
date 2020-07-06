@@ -121,13 +121,6 @@ def initiate_failure(request):
         return redirect('nations_mabiweb_bidbot:home')
     return render(request, 'nations_mabiweb_bidbot/initiate_failure.html', {'match_id': match_id})
 
-def get_twice_bid_values(bid_values):
-    twice_bid_values = {}
-    for (nation, bid_value) in bid_values.items():
-        m = re.match(r'^(\d+)((?:\.[05])?)$', bid_value)
-        twice_bid_values[nation] = (int(m.group(1)) * 2) + (1 if m.group(2) == '.5' else 0)
-    return twice_bid_values
-
 @login_required
 def bid(request, pk):
     match = get_object_or_404(Match, match_id=pk)
@@ -146,10 +139,13 @@ def bid(request, pk):
             else:
                 player = possible_usernames[0]
             bid_values = {nation.name: form.cleaned_data.get(f'bid_for_{nation.name}') for nation in match.nation_set.all()}
+            twice_bid_values = {}
+            for (nation, bid_value) in bid_values.items():
+                m = re.match(r'^(\d+)((?:\.[05])?)$', bid_value)
+                twice_bid_values[nation] = (int(m.group(1)) * 2) + (1 if m.group(2) == '.5' else 0)
             request.session['match_id'] = match.match_id
             request.session['player'] = player
-            request.session['bid_values'] = bid_values
-            twice_bid_values = get_twice_bid_values(bid_values)
+            request.session['twice_bid_values'] = twice_bid_values
             if len(twice_bid_values) != len(set(twice_bid_values.values())):
                 return redirect('nations_mabiweb_bidbot:rank', pk=pk)
             return redirect('nations_mabiweb_bidbot:confirm', pk=pk)
@@ -161,22 +157,24 @@ def bid(request, pk):
         player = None
     return render(request, 'nations_mabiweb_bidbot/bid.html', {'match': match, 'player': player, 'form': form})
 
+def twice_bid_value_to_bid_string(twice_bid_value):
+    return f'{twice_bid_value//2}' + ('' if twice_bid_value % 2 == 0 else '.5')
+
 @login_required
 def rank(request, pk):
     match_id = request.session.get('match_id', None)
     player = request.session.get('player', None)
-    bid_values = request.session.get('bid_values', None)
-    if match_id is None or player is None or bid_values is None or match_id != pk:
+    twice_bid_values = request.session.get('twice_bid_values', None)
+    if match_id is None or player is None or twice_bid_values is None or match_id != pk:
         return redirect('nations_mabiweb_bidbot:bid', pk=pk)
     match = get_object_or_404(Match, match_id=pk)
-    twice_bid_values = get_twice_bid_values(bid_values)
-    player_bid_values = sorted(set(twice_bid_values.values()), reverse=True)
+    descending_bid_values = sorted(set(twice_bid_values.values()), reverse=True)
     if request.method == 'POST':
         form = RankForm(twice_bid_values, request.POST)
         if form.is_valid():
             rankings = {}
             rank = 0
-            for bid_value in player_bid_values:
+            for bid_value in descending_bid_values:
                 nations_with_bid_value = [nation for (nation, bid_for_nation) in twice_bid_values.items() if bid_for_nation == bid_value]
                 if len(nations_with_bid_value) == 1:
                     rankings[nations_with_bid_value[0]] = rank
@@ -189,10 +187,10 @@ def rank(request, pk):
     else:
         form = RankForm(twice_bid_values)
     nation_sets = []
-    for bid_value in player_bid_values:
+    for bid_value in descending_bid_values:
         nations_with_bid_value = [nation for (nation, bid_for_nation) in twice_bid_values.items() if bid_for_nation == bid_value]
         if len(nations_with_bid_value) != 1:
-            nation_sets.append(nations_with_bid_value)
+            nation_sets.append((nations_with_bid_value, twice_bid_value_to_bid_string(bid_value)))
     return render(request, 'nations_mabiweb_bidbot/rank.html', {'match': match, 'player': player, 'nation_sets': nation_sets, 'form': form})
 
 @login_required
@@ -200,16 +198,15 @@ def confirm(request, pk):
     if request.method == 'POST':
         match_id = request.session.pop('match_id', None)
         player = request.session.pop('player', None)
-        bid_values = request.session.pop('bid_values', None)
+        twice_bid_values = request.session.pop('twice_bid_values', None)
     else:
         match_id = request.session.get('match_id', None)
         player = request.session.get('player', None)
-        bid_values = request.session.get('bid_values', None)
-    if match_id is None or player is None or bid_values is None or match_id != pk:
+        twice_bid_values = request.session.get('twice_bid_values', None)
+    if match_id is None or player is None or twice_bid_values is None or match_id != pk:
         return redirect('nations_mabiweb_bidbot:bid', pk=pk)
     match = get_object_or_404(Match, match_id=pk)
     player = match.player_set.get(name=player)
-    twice_bid_values = get_twice_bid_values(bid_values)
     rankings = request.session.pop('rankings', None)
     if rankings is None:
         def bid_sort_key(nation):
@@ -229,16 +226,16 @@ def confirm(request, pk):
     def nation_sort_key(nation_bid):
         (nation, bid) = nation_bid
         return rankings[nation]
-    bid_values = {nation: (f'{twice_bid_value//2}' + ('' if twice_bid_value % 2 == 0 else '.5')) for (nation, twice_bid_value) in twice_bid_values.items()}
+    bid_values = {nation: twice_bid_value_to_bid_string(twice_bid_value) for (nation, twice_bid_value) in twice_bid_values.items()}
     bid_values = sorted(bid_values.items(), key=nation_sort_key)
     bid_values = [(nation, f'{ordinals[rankings[nation]+1].capitalize()} choice with a bid of {bid}') for (nation, bid) in bid_values]
     return render(request, 'nations_mabiweb_bidbot/confirm.html', {'match': match, 'player': player, 'bid_values': bid_values})
 
 def make_bid_string(player, bids, preferences):
     bid_strings = []
-    player_bid_values = sorted(set(bids.values()), reverse=True)
-    for bid_value in player_bid_values:
-        bid_string = f'{bid_value//2}' + ('' if bid_value % 2 == 0 else '.5') + ' for '
+    descending_bid_values = sorted(set(bids.values()), reverse=True)
+    for bid_value in descending_bid_values:
+        bid_string = twice_bid_value_to_bid_string(bid_value) + ' for '
         nations_with_bid_value = [nation for (nation, bid_for_nation) in bids.items() if bid_for_nation == bid_value]
         if len(nations_with_bid_value) == 1:
             bid_string += f'{nations_with_bid_value[0]}'
@@ -280,7 +277,7 @@ def assign_nations(players, nations, bids, preferences):
         nation = sorted(player_highest_bid_nations, key=preferences[player][highest_bid].index)[0]
         # Construct the string announcing the assignment:
         s_if_plural_points = 's' if highest_bid != 2 else ''
-        bid_string = f'{highest_bid//2}' + ('' if highest_bid % 2 == 0 else '.5')
+        bid_string = twice_bid_value_to_bid_string(highest_bid)
         nation_assignments.append(f'{player} gets {nation} for {bid_string} point{s_if_plural_points}')
         # Remove that player and that nation from further consideration:
         remaining_players.remove(player)
@@ -294,37 +291,37 @@ def results(request, pk):
     player_names = set(player_order)
     bid_players = {bid.player.name for bid in match.bid_set.all()}
     may_bid = False
-    player_bids = None
+    bid_strings = None
     nation_assignments = None
     if bid_players == player_names:
-        player_bids = []
-        bid_values = {}
-        bid_preferences = {}
+        bid_strings = []
+        twice_bid_values = {}
+        preferences = {}
         for player_name in player_order:
             player = match.player_set.get(name=player_name)
-            bids = {}
+            player_bids = {}
             rankings = {}
             for nation in match.nation_set.all():
                 bid = match.bid_set.get(player=player, nation=nation)
-                bids[nation.name] = bid.twice_bid_value
+                player_bids[nation.name] = bid.twice_bid_value
                 rankings[nation.name] = bid.rank
-            bid_values[player_name] = bids
-            preferences = {}
+            twice_bid_values[player_name] = player_bids
+            player_preferences = {}
             def rank_sort_key(nation):
                 return rankings[nation]
-            for bid_value in set(bids.values()):
-                nations_with_bid_value = [nation for (nation, bid_for_nation) in bids.items() if bid_for_nation == bid_value]
-                preferences[bid_value] = sorted(nations_with_bid_value, key=rank_sort_key)
-            bid_preferences[player_name] = preferences
-            player_bids.append(make_bid_string(player_name, bids, preferences))
-        nation_assignments = assign_nations(player_order, nations, bid_values, bid_preferences)
+            for bid_value in set(player_bids.values()):
+                nations_with_bid_value = [nation for (nation, bid_for_nation) in player_bids.items() if bid_for_nation == bid_value]
+                player_preferences[bid_value] = sorted(nations_with_bid_value, key=rank_sort_key)
+            preferences[player_name] = player_preferences
+            bid_strings.append(make_bid_string(player_name, player_bids, player_preferences))
+        nation_assignments = assign_nations(player_order, nations, twice_bid_values, preferences)
     elif request.user.is_authenticated:
         usernames = {username.username for username in request.user.mabiwebusername_set.all()}
         possible_usernames = (player_names & usernames) - bid_players
         may_bid = bool(possible_usernames)
     context = {
         'match': match,
-        'player_bids': player_bids,
+        'player_bids': bid_strings,
         'nation_assignments': nation_assignments,
         'bid_players': bid_players,
         'may_bid': may_bid
