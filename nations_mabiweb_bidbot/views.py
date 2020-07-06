@@ -52,14 +52,7 @@ def verify_mabiweb_username(request):
         mabiweb_uid = request.session.pop('mabiweb_uid', None)
         if username is None or mabiweb_uid is None:
             return redirect('nations_mabiweb_bidbot:home')
-        token = int(secrets.token_hex(), 16)
-        password_hash = int(base64.standard_b64decode(request.user.password.split('$')[-1].encode('ascii')).hex(), 16)
-        bits = token ^ password_hash
-        verification_code = 0
-        while bits:
-            verification_code ^= bits & 0xffffffffffffffff
-            bits >>= 64
-        verification_code = f'{verification_code:x}'
+        verification_code = secrets.token_hex(8)
         request.session['username'] = username
         request.session['mabiweb_uid'] = mabiweb_uid
         request.session['verification_code'] = verification_code
