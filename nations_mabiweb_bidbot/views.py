@@ -9,9 +9,6 @@ import urllib.request
 from .models import MaBiWebUsername, Match, Player, Nation, Bid
 from .forms import BidForm, RankForm, MatchForm, MaBiWebUsernameForm, ordinals
 
-def home(request):
-    return render(request, 'nations_mabiweb_bidbot/home.html')
-
 @login_required
 def add_mabiweb_username(request):
     if request.method == 'POST':
