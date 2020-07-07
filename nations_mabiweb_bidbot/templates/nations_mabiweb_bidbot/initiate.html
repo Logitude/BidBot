@@ -3,6 +3,19 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    <h2>Initiate bidding</h2>
+    <div class="col-sm-6 px-0">
+        <p>
+            You can find the complete instructions
+            <a href="{% url 'nations_mabiweb_bidbot:howto' %}" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+        <p>
+            The MaBiWeb match ID can be found to the left of the match listing on your
+            <a href="http://www.mabiweb.com/modules.php?name=Game_Manager" target="_blank" rel="noopener noreferrer">Game Manager</a>
+            page. It can also be found near the top of the match page
+            where it says, "Nations Game ID=".
+        </p>
+    </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:initiate' %}">
         {% csrf_token %}
         {% for field in form %}

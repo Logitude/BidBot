@@ -5,10 +5,23 @@
 {% block content %}
     <h2>{{ match }}</h2>
     <h3>Bidding as {{ player }}</h3>
+    <div class="col-sm-6 px-0">
+        <p>
+            You can find the complete instructions
+            <a href="{% url 'nations_mabiweb_bidbot:howto' %}" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+        <p>
+            This step is necessary in case you win the bid
+            for multiple nations. BidBot uses your rankings
+            to decide which nation you receive. See the
+            <a href="{% url 'nations_mabiweb_bidbot:algorithm' %}" target="_blank" rel="noopener noreferrer">algorithm</a>
+            page for more details.
+        </p>
+    </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:rank' match.match_id %}">
         {% csrf_token %}
         {% for nation_set, bid_value in nation_sets %}
-            <div class='py-3'>
+            <div class='pb-3'>
                 <p>Rank your preference for the following nations, for which you bid <strong>{{ bid_value }}</strong>:</p>
                 {% for nation in nation_set %}
                     {% with form|get:nation as field %}
@@ -33,7 +46,7 @@
             </div>
         {% endfor %}
         {% for error_message in form.non_field_errors %}
-            <div class="py-3">
+            <div class="pb-3">
                 <span class="text-danger">{{ error_message }}</span>
             </div>
         {% endfor %}

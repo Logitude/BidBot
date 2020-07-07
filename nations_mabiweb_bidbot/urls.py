@@ -7,6 +7,8 @@ app_name = 'nations_mabiweb_bidbot'
 urlpatterns = [
     path('', TemplateView.as_view(template_name='nations_mabiweb_bidbot/home.html'), name='home'),
     path('about/', TemplateView.as_view(template_name='nations_mabiweb_bidbot/about.html'), name='about'),
+    path('algorithm/', TemplateView.as_view(template_name='nations_mabiweb_bidbot/algorithm.html'), name='algorithm'),
+    path('setup/', TemplateView.as_view(template_name='nations_mabiweb_bidbot/setup.html'), name='setup'),
     path('howto/', TemplateView.as_view(template_name='nations_mabiweb_bidbot/howto.html'), name='howto'),
     path('add-username/', views.add_mabiweb_username, name='add_mabiweb_username'),
     path('verify-username/', views.verify_mabiweb_username, name='verify_mabiweb_username'),

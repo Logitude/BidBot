@@ -34,11 +34,7 @@ def verify_mabiweb_username(request):
             mabiweb_profile_page = urllib.request.urlopen(mabiweb_profile_url).read().decode('iso-8859-1')
         except:
             mabiweb_profile_page = ''
-        if f'>Viewing profile :: {username}</th>' in mabiweb_profile_page:
-            m = re.search(f'{verification_code}', mabiweb_profile_page)
-        else:
-            m = None
-        if m is None:
+        if not (f'>Viewing profile :: {username}</th>' in mabiweb_profile_page and verification_code in mabiweb_profile_page):
             request.session['username'] = username
             request.session['mabiweb_uid'] = mabiweb_uid
             return redirect('nations_mabiweb_bidbot:verify_mabiweb_username_failure')

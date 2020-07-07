@@ -1,0 +1,54 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>Setting up your account</h2>
+    <p>
+        <strong>These are all one-time steps!</strong>
+    </p>
+    <p>
+        First, you'll need a BidBot account. Your BidBot username does not
+        need to match your MaBiWeb username. In fact, you can have more than
+        one MaBiWeb username tied to this account.
+        <a href="{% url 'signup' %}">Sign up</a>
+        now to get started.
+    </p>
+    <p>
+        Next, you need to tie your MaBiWeb username to your BidBot account.
+        BidBot needs to know that you are who you say you are.
+        To do this, go to your
+        <a href="{% url 'profile' %}">profile</a>
+        and under "MaBiWeb usernames", click the "Add" button.
+        Enter your MaBiWeb username exactly as it is on MaBiWeb.
+    </p>
+    <p>
+        You will also need your MaBiWeb user ID. Get this by going to the
+        <a href="http://www.mabiweb.com/modules.php?name=Forums" target="_blank" rel="noopener noreferrer">MaBiWeb Forum</a>
+        and scrolling to the bottom of the page. You should see your username
+        after "Registered Users:". Your username is a link to your forum
+        profile page and contains your MaBiWeb user ID at the very end of the
+        URL, where it says something like, "u=10222".
+    </p>
+    <p>
+        Once you fill in those two fields and press the "Add" button, you
+        will be given a verification code. You need to display this code
+        on your MaBiWeb forum profile to link your accounts. Keep the BidBot
+        verification page open and open a new tab in your browser.
+        Add the code by going to the
+        <a href="http://www.mabiweb.com/modules.php?name=Your_Account&op=edituser" target="_blank" rel="noopener noreferrer">Your Info</a>
+        MaBiWeb page. You need to put the verification code into a field
+        that will show up on your MaBiWeb forum profile page. The three
+        fields that work are, "Your Location", "Your Occupation", and "Your
+        Interests". Put the code in any of those three fields and click the
+        "Save Changes" button at the bottom of the page. Go back to your
+        browser tab with the verification page open and press "Verify".
+    </p>
+    <p>
+        If you were successful, then your MaBiWeb username should have been
+        added to your profile page. There is no need to keep the verification
+        code on your MaBiWeb profile. Your two accounts are now linked.
+    </p>
+    <p>
+        Whew! Now it's time to learn
+        <a href="{% url 'nations_mabiweb_bidbot:howto' %}">how to start bidding</a>.
+    </p>
+{% endblock %}

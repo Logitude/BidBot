@@ -1,5 +1,58 @@
 {% extends 'nations_mabiweb_bidbot/base.html' %}
 
 {% block content %}
-    <h2>How this works:</h2>
+    <h2>How to bid</h2>
+    <p>
+        First, at least one player has to
+        <a href="{% url 'nations_mabiweb_bidbot:initiate' %}">initiate bidding</a>.
+        You do this by entering the MaBiWeb match ID. The match ID
+        can be found to the left of the match listing on your
+        <a href="http://www.mabiweb.com/modules.php?name=Game_Manager" target="_blank" rel="noopener noreferrer">Game Manager</a>
+        page. It can also be found near the top of the match page
+        where it says, "Nations Game ID=".
+    </p>
+    <p>
+        That will load the match into BidBot and take you to the results
+        page for the auction. You should now see a button at the bottom of
+        the results page that says, "Bid". If you don't see that button,
+        then you probably need to
+        <a href="{% url 'nations_mabiweb_bidbot:setup' %}">link your MaBiWeb account</a>
+        to your BidBot account.
+    </p>
+    <p>
+        Press the button to bid. You'll see a form where you can enter your
+        bid for each of the nations available in the match. You are bidding
+        points. Once everyone has bid, each player will be assigned one of
+        the nations in the match using the auction
+        <a href="{% url 'nations_mabiweb_bidbot:algorithm' %}">algorithm</a>.
+        Each player will have to subtract the points they bid for the nation
+        they were assigned from their score once the match is complete.
+    </p>
+    <p>
+        Bids can be in half-point increments. Examples of what you can enter
+        are, "0", "0.0", "0.5", "1", and so on.
+    </p>
+    <p>
+        You are allowed to bid the same value for more than one nation!
+        If you do, then when you press "Review Bid", you will see another
+        form where you must rank your preferences for those nations.
+        These preferences will be used in the case that you win the bid
+        for more than one of these nations.
+    </p>
+    <p>
+        You will have a chance to review your bid before locking it in.
+        Once you have confirmed your bid, you will not be able to modify
+        it. Choose wisely!
+    </p>
+    <p>
+        After confirming your bid, you will be taken back to the results
+        page, where it will say that you have placed a bid.
+    </p>
+    <p>
+        Once all players in the match have placed their bids, the bids
+        and the resulting assignment of nations will be revealed!
+    </p>
+    <p>
+        Good luck and have fun!
+    </p>
 {% endblock %}

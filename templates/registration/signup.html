@@ -3,6 +3,15 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    <h2>Create a BidBot account</h2>
+    <div class="col-sm-6 px-0">
+        <p>
+            Your BidBot username does not need to match your MaBiWeb username.
+            You will need to
+            <a href="{% url 'nations_mabiweb_bidbot:setup' %}" target="_blank" rel="noopener noreferrer">link your MaBiWeb username</a>
+            to your BidBot account as an additional step.
+        </p>
+    </div>
     <form method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         {% for field in form %}

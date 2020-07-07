@@ -39,5 +39,6 @@ class MatchForm(forms.Form):
     match_id = forms.CharField(label='MaBiWeb match ID', validators=[validators.RegexValidator(r'^\d+$')])
 
 class MaBiWebUsernameForm(forms.Form):
-    username = forms.CharField(label='MaBiWeb username')
+    help_text = 'Must exactly match your MaBiWeb username. Case sensitive.'
+    username = forms.CharField(label='MaBiWeb username', help_text=help_text)
     mabiweb_uid = forms.CharField(label='MaBiWeb user ID', validators=[validators.RegexValidator(r'^\d+$')])

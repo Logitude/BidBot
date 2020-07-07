@@ -1,0 +1,46 @@
+{% extends 'nations_mabiweb_bidbot/base.html' %}
+
+{% block content %}
+    <h2>Algorithm</h2>
+    <p>
+        How does BidBot decide who wins each nation and for what price?
+    </p>
+    <p>
+        Since multiple nations are up for auction, and we want to speed things
+        up as much as possible, every player bids for every nation simultaneously.
+        Each player enters the number of points they are willing to lose at the
+        end of the match in order to play as each nation. Bids can be in half-point
+        increments.
+    </p>
+    <p>
+        Once all bids have been placed, the nations are assigned to players.
+        The first nation to be assigned is the one that received the highest bid.
+        That nation goes to the player who placed that highest bid. That nation
+        and that player are then removed from the auction, and the process is
+        repeated until each player has a nation assigned to them.
+    </p>
+    <p>
+        What about ties?
+    </p>
+    <p>
+        What if two players bid the same amount for a nation? Ties are broken by
+        reverse player order. Whoever is last in turn order for the first round
+        wins ties against all other players.
+    </p>
+    <p>
+        What if a player bids the same amount for more than one nation? This is where
+        things get tricky. Players are allowed to bid the same point value for
+        more than one nation. In case that bid value is the winning bid at any
+        step in the assignment process, and more than one of those nations are still
+        available, BidBot needs a way to decide which of those nations to assign
+        to that player.
+    </p>
+    <p>
+        To do this, BidBot asks players who bid the same amount for more
+        than one nation to rank those nations from first choice to last
+        choice. There can be more than one group of such nations. Players
+        are asked to rank the nations within each group. When a player wins
+        the bid for more than one nation at a time, the nation assigned to
+        that player is the one they ranked ahead of the others in that group.
+    </p>
+{% endblock %}

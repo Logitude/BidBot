@@ -3,6 +3,25 @@
 {% block content %}
     <h2>Verify MaBiWeb username: {{ username }}</h2>
     <h2>Code: {{ verification_code }}</h2>
+    <div class="col-sm-6 px-0">
+        <p>
+            You can find the complete instructions
+            <a href="{% url 'nations_mabiweb_bidbot:setup' %}" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+        <p>
+            You need to display this code on your MaBiWeb forum profile
+            to link your accounts. Go to the
+            <a href="http://www.mabiweb.com/modules.php?name=Your_Account&op=edituser" target="_blank" rel="noopener noreferrer">Your Info</a>
+            MaBiWeb page. (This link should open a new tab.)
+            You need to put the verification code into a field
+            that will show up on your MaBiWeb forum profile page. The three
+            fields that work are, "Your Location", "Your Occupation", and "Your
+            Interests", which are in the middle of the page.
+            Put this code in any of those three fields and click the
+            "Save Changes" button at the bottom of the page. Then come back here
+            and press "Verify".
+        </p>
+    </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:verify_mabiweb_username' %}">
         {% csrf_token %}
         <button class="btn btn-primary" type="submit">Verify</button>

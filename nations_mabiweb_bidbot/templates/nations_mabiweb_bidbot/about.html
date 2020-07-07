@@ -4,7 +4,7 @@
     <h2>About BidBot for Nations on MaBiWeb</h2>
     <p>
         This site allows players who play the board game, Nations, using
-        <a href="http://www.mabiweb.com">MaBiWeb</a>
+        <a href="http://www.mabiweb.com" target="_blank" rel="noopener noreferrer">MaBiWeb</a>
         to auction the nations available for a given match. The idea is to
         use bidding to offset the advantages one nation has over another.
         Auctions can already be done using the chat feature of MaBiWeb,
@@ -15,13 +15,13 @@
     <p>
         To speed things up, players can use a blind auction. With people in the
         same room, a blind auction can be done by having each person write down
-        their bid, and then once everyone has bid, reveal the bids simultaneously.
+        their bid, and then once everyone has bid, revealing the bids simultaneously.
     </p>
     <p>
         That doesn't work for correspondence play. Even if everyone could be
         online at the same time, how could you reveal simultaneously? You would
         need some way to collect the bids without other players seeing what
-        bids have already been made and being able to change theirs in response.
+        bids have already been made and without being able to change theirs in response.
     </p>
     <p>
         Enter BidBot! BidBot is a place where players can enter their bids
@@ -31,48 +31,11 @@
     </p>
     <p>
         Alright, let's
-        <a href="{% url 'nations_mabiweb_bidbot:howto' %}">get started!</a>
-    </p>
-    <h3>Algorithm</h3>
-    <p>
-        How does BidBot decide who wins each nation and for what price?
+        <a href="{% url 'nations_mabiweb_bidbot:setup' %}">get started!</a>
     </p>
     <p>
-        Since multiple nations are up for auction, and we want to speed things
-        up as much as possible, every player bids for every nation simultaneously.
-        Each player enters the number of points they are willing to lose at the
-        end of the match in order to play as each nation. Bids can be in half-point
-        increments.
-    </p>
-    <p>
-        Once all bids have been placed, the nations are assigned to players.
-        The first nation to be assigned is the one that received the highest bid.
-        That nation goes to that player who placed that highest bid. That nation
-        and that player are then removed from the auction, and the process is
-        repeated until each player has a nation assigned to them.
-    </p>
-    <p>
-        What about ties?
-    </p>
-    <p>
-        What if two players bid the same amount for a nation? Ties are broken by
-        reverse player order. Whoever is last in turn order for the first round
-        wins ties against all other players.
-    </p>
-    <p>
-        What if a player bids the same amount for more than one nation? This is where
-        things get tricky. Players are allowed to bid the same point value for
-        more than one nation. In case that bid value is the winning bid at any
-        step in the assignment process, and more than one of those nations are still
-        available, BidBot needs a way to decide which of those nations to assign
-        to that player.
-    </p>
-    <p>
-        To do this, BidBot asks players who bid the same amount for more
-        than one nation to rank those nations from first choice to last
-        choice. There can be more than one group of such nations. Players
-        are asked to rank the nations within each group. When a player wins
-        the bid for more than one nation at a time, the nation assigned to
-        that player is the one they ranked ahead of the others in that group.
+        Or learn about the
+        <a href="{% url 'nations_mabiweb_bidbot:algorithm' %}">algorithm</a>
+        BidBot uses to assign nations to players.
     </p>
 {% endblock %}

@@ -3,6 +3,22 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    <h2>Link your MaBiWeb username to your BidBot account</h2>
+    <div class="col-sm-6 px-0">
+        <p>
+            You can find the complete instructions
+            <a href="{% url 'nations_mabiweb_bidbot:setup' %}" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+        <p>
+            Find your MaBiWeb user ID by going to the
+            <a href="http://www.mabiweb.com/modules.php?name=Forums" target="_blank" rel="noopener noreferrer">MaBiWeb Forum</a>
+            page and scrolling to the bottom. You should see your username
+            after "Registered Users:". Your username is a link to your forum
+            profile page and contains your MaBiWeb user ID at the very end of the
+            URL, where it says something like, "u=10222". In that case, you would
+            enter "10222" below.
+        </p>
+    </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:add_mabiweb_username' %}">
         {% csrf_token %}
         {% for field in form %}

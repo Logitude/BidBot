@@ -3,9 +3,15 @@
 {% block content %}
     <h2>MaBiWeb match {{ match.match_id }}</h2>
     <h3>Bidding as {{ player.name }}</h3>
+    <div class="col-sm-6 px-0">
+        <p>
+            Please review your bids. Once you have confirmed them,
+            you will not be able to change them.
+        </p>
+    </div>
     <div class="pb-3">
         {% for bid_value in bid_values %}
-            {{ bid_value }}<br>
+            <strong>{{ bid_value }}</strong><br>
         {% endfor %}
     </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:confirm' match.match_id %}">

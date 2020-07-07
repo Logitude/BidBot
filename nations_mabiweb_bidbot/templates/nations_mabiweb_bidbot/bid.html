@@ -5,9 +5,20 @@
 {% block content %}
     <h2>{{ match }}</h2>
     {% if player %}
-        <h2>Bidding as {{ player }}</h2>
+        <h3>Bidding as {{ player }}</h3>
     {% endif %}
-    <div class="py-3">
+    <div class="col-sm-6 px-0">
+        <p>
+            You can find the complete instructions
+            <a href="{% url 'nations_mabiweb_bidbot:howto' %}" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
+        <p>
+            Bids can be in half-point increments.
+            Examples of what you can enter
+            are, "0", "0.0", "0.5", "1", and so on.
+        </p>
+    </div>
+    <div class="pb-3">
         <form method="post" action="{% url 'nations_mabiweb_bidbot:bid' match.match_id %}">
             {% csrf_token %}
             {% for field in form %}
