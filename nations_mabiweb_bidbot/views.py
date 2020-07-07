@@ -42,7 +42,9 @@ def verify_mabiweb_username(request):
             request.session['username'] = username
             request.session['mabiweb_uid'] = mabiweb_uid
             return redirect('nations_mabiweb_bidbot:verify_mabiweb_username_failure')
-        MaBiWebUsername(user=request.user, username=username).save()
+        (username, new_username) = MaBiWebUsername.objects.get_or_create(user=request.user, username=username)
+        if new_username:
+            username.save()
         return redirect('profile')
     else:
         username = request.session.pop('username', None)
