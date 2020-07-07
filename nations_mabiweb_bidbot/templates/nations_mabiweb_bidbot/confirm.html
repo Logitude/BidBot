@@ -2,14 +2,14 @@
 
 {% block content %}
     <h2>MaBiWeb match {{ match.match_id }}</h2>
-    <h2>Bidding as {{ player.name }}</h2>
-    <ul>
-        {% for nation, bid_value in bid_values %}
-            <li>{{ nation }}: {{ bid_value }}</li>
+    <h3>Bidding as {{ player.name }}</h3>
+    <div class="pb-3">
+        {% for bid_value in bid_values %}
+            {{ bid_value }}<br>
         {% endfor %}
-    </ul>
+    </div>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:confirm' match.match_id %}">
         {% csrf_token %}
-        <input type="submit" value="Confirm">
+        <button class="btn btn-primary" type="submit">Confirm</button>
     </form>
 {% endblock %}

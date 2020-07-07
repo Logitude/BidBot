@@ -218,7 +218,7 @@ def confirm(request, pk):
         return rankings[nation]
     bid_values = {nation: twice_bid_value_to_bid_string(twice_bid_value) for (nation, twice_bid_value) in twice_bid_values.items()}
     bid_values = sorted(bid_values.items(), key=nation_sort_key)
-    bid_values = [(nation, f'{ordinals[rankings[nation]+1].capitalize()} choice with a bid of {bid}') for (nation, bid) in bid_values]
+    bid_values = [f'{ordinals[rankings[nation]+1].capitalize()} choice: {nation} with a bid of {bid}' for (nation, bid) in bid_values]
     return render(request, 'nations_mabiweb_bidbot/confirm.html', {'match': match, 'player': player, 'bid_values': bid_values})
 
 def make_bid_string(player, bids, preferences):

@@ -3,36 +3,36 @@
 {% block content %}
     <h2>{{ match }}</h2>
     <h3>Nations:</h3>
-    <ul>
-    {% for nation in match.nation_set.all %}
-        <li>{{ nation.name }}</li>
-    {% endfor %}
-    </ul>
-    <h3>Players:</h3>
-    <ul>
-    {% if player_bids %}
-        {% for player_bid in player_bids %}
-            <li>{{ player_bid }}</li>
+    <div class="pb-3 px-2">
+        {% for nation in match.nation_set.all %}
+            {{ nation.name }}<br>
         {% endfor %}
-    {% else %}
-        {% for player in match.player_set.all %}
-            <li>{{ player.name }}
+    </div>
+    <h3>Players:</h3>
+    <div class="pb-3 px-2">
+        {% if player_bids %}
+            {% for player_bid in player_bids %}
+                {{ player_bid }}<br>
+            {% endfor %}
+        {% else %}
+            {% for player in match.player_set.all %}
+                {{ player.name }}
                 {% if player.name in bid_players %}
                     has placed a bid!
                 {% endif %}
-            </li>
-        {% endfor %}
-    {% endif %}
-    </ul>
+                <br>
+            {% endfor %}
+        {% endif %}
+    </div>
     {% if may_bid %}
-        <a href="{% url 'nations_mabiweb_bidbot:bid' match.match_id %}">Bid</a>
+        <a class="btn btn-primary" href="{% url 'nations_mabiweb_bidbot:bid' match.match_id %}">Bid</a>
     {% endif %}
     {% if nation_assignments %}
         <h3>Nation assignments:</h3>
-        <ul>
-        {% for nation_assignment in nation_assignments %}
-            <li>{{ nation_assignment }}</li>
-        {% endfor %}
-        </ul>
+        <div class="pb-3 px-2">
+            {% for nation_assignment in nation_assignments %}
+                {{ nation_assignment }}<br>
+            {% endfor %}
+        </div>
     {% endif %}
 {% endblock %}

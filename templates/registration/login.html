@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block content %}
     {% if next %}
         {% if user.is_authenticated %}
@@ -10,8 +12,25 @@
     {% endif %}
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Log In">
+        {% for field in form %}
+            <div class="form-group">
+                <div class="col-sm-6 px-0">
+                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                    {% render_field field class="form-control" %}
+                    {% for error_message in field.errors %}
+                        <div>
+                            <small id="id_{{ field.name }}" class="text-danger">{{ error_message }}</small>
+                        </div>
+                    {% endfor %}
+                    {% if field.help_text %}
+                        <div>
+                            <small id="id_{{ field.name }}" class="text-mutex">{{ field.help_text }}</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Log In</button>
         <input type="hidden" name="next" value="{{ next }}">
     </form>
 {% endblock %}

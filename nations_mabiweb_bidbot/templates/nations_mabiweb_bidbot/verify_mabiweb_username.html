@@ -5,7 +5,7 @@
     <h2>Code: {{ verification_code }}</h2>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:verify_mabiweb_username' %}">
         {% csrf_token %}
-        <input type="submit" value="Verify">
+        <button class="btn btn-primary" type="submit">Verify</button>
         <input type="hidden" name="username" value="{{ username }}">
     </form>
 {% endblock %}

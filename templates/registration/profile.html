@@ -2,21 +2,21 @@
 
 {% block content %}
     <h2>Profile for {{ user.username }}</h2>
-    <p>[<a href="{% url 'password_change' %}">Change password</a>]</p>
+    <p><a class="btn btn-primary btn-sm" href="{% url 'password_change' %}">Change password</a></p>
     <h3>MaBiWeb usernames:</h3>
-    {% if not user.mabiwebusername_set.empty %}
-        <ul>
-        {% for username in user.mabiwebusername_set.all %}
-            <li>
-                <form id="remove{{ forloop.counter }}" action="{% url 'nations_mabiweb_bidbot:remove_mabiweb_username' %}" method="get">
-                    {% csrf_token %}
-                    <strong>{{ username.username }}</strong>
-                    [<a href="#" onclick="document.forms['remove{{ forloop.counter }}'].submit();">remove</a>]
-                    <input type="hidden" name="username" value="{{ username.username }}">
-                </form>
-            </li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-    <p>[<a href="{% url 'nations_mabiweb_bidbot:add_mabiweb_username' %}">add</a>]</p>
+        <div class="py-2 px-3">
+            {% for username in user.mabiwebusername_set.all %}
+                <div class="py-1">
+                    <form id="remove{{ forloop.counter }}" action="{% url 'nations_mabiweb_bidbot:remove_mabiweb_username' %}" method="get">
+                        {% csrf_token %}
+                        <strong>{{ username.username }}</strong>
+                        <a class="btn btn-primary btn-sm mx-3" href="#" onclick="document.forms['remove{{ forloop.counter }}'].submit();">remove</a>
+                        <input type="hidden" name="username" value="{{ username.username }}">
+                    </form>
+                </div>
+            {% endfor %}
+            <div class="py-1">
+                <a class="btn btn-primary btn-sm" href="{% url 'nations_mabiweb_bidbot:add_mabiweb_username' %}">add</a>
+            </div>
+        </div>
 {% endblock %}

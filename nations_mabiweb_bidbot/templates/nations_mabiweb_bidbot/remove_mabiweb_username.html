@@ -4,7 +4,7 @@
     <h2>MaBiWeb username: {{ username.username }}</h2>
     <form method="post" action="{% url 'nations_mabiweb_bidbot:remove_mabiweb_username' %}">
         {% csrf_token %}
-        <input type="submit" value="Remove">
+        <button class="btn btn-primary" type="submit">Remove</button>
         <input type="hidden" name="username" value="{{ username.username }}">
     </form>
 {% endblock %}
