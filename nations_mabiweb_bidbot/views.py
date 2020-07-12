@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.html import format_html
 
 import re
 import secrets
@@ -224,7 +225,7 @@ def make_bid_string(player, bids, preferences):
         bid_string = twice_bid_value_to_bid_string(bid_value) + ' for '
         nations_with_bid_value = [nation for (nation, bid_for_nation) in bids.items() if bid_for_nation == bid_value]
         if len(nations_with_bid_value) == 1:
-            bid_string += f'{nations_with_bid_value[0]}'
+            bid_string += nations_with_bid_value[0]
         else:
             nation_preferences = list(preferences[bid_value])
             if len(nations_with_bid_value) == 2:
@@ -236,7 +237,7 @@ def make_bid_string(player, bids, preferences):
             bid_string += ' over '.join(nation_preferences)
             bid_string += ')'
         bid_strings.append(bid_string)
-    return f'{player} bid ' + '; '.join(bid_strings)
+    return format_html('<b>{}</b> bid {}', player, '; '.join(bid_strings))
 
 # assign_nations
 #

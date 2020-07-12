@@ -8,11 +8,17 @@
             {{ nation.name }}<br>
         {% endfor %}
     </div>
-    <h3>Players:</h3>
+    {% if player_bids %}
+        <h3>Bids:</h3>
+    {% else %}
+        <h3>Players:</h3>
+    {% endif %}
     <div class="pb-3 px-2">
         {% if player_bids %}
             {% for player_bid in player_bids %}
-                {{ player_bid }}<br>
+                <div class="pb-3 px-0">
+                    {{ player_bid }}
+                </div>
             {% endfor %}
         {% else %}
             {% for player in match.player_set.all %}
