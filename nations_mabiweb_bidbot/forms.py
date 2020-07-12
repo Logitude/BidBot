@@ -22,8 +22,9 @@ class RankForm(forms.Form):
                 continue
             self.nation_sets.append(nations_with_bid_value)
             ranks = ordinals[1:len(nations_with_bid_value)+1]
+            choice_list = [('', '')] + [(rank, rank.capitalize()) for rank in ranks]
             for nation in nations_with_bid_value:
-                self.fields[nation] = forms.ChoiceField(label=nation, choices=zip(ranks, ranks))
+                self.fields[nation] = forms.ChoiceField(label=nation, choices=choice_list)
 
     def clean(self):
         cleaned_data = super().clean()
