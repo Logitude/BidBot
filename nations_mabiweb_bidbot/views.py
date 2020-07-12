@@ -203,13 +203,11 @@ def confirm(request, pk):
         rankings = {nation: rank for (rank, nation) in enumerate(sorted_nations)}
     if request.method == 'POST':
         for (nation, twice_bid_value) in twice_bid_values.items():
-            bid = Bid()
-            bid.match = match
-            bid.player = player
-            bid.nation = match.nation_set.get(name=nation)
-            bid.twice_bid_value = twice_bid_value
-            bid.rank = rankings[nation]
-            bid.save()
+            (bid, new_bid) = Bid.objects.get_or_create(match=match, player=player, nation=match.nation_set.get(name=nation))
+            if new_bid:
+                bid.twice_bid_value = twice_bid_value
+                bid.rank = rankings[nation]
+                bid.save()
         return redirect('nations_mabiweb_bidbot:results', pk=pk)
     def nation_sort_key(nation_bid):
         (nation, bid) = nation_bid
